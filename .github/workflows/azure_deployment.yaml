@@ -69,3 +69,4 @@ jobs:
           app-name: 'web-app-celebration-invite-api'
           slot-name: 'Production'
           package: .
+          
