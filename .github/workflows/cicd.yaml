@@ -20,7 +20,10 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Run unit tests
+      - name: Install NPM package
+        run: npm install
+
+      - name: Run tests
         run: npm run test
 
       - name: Build app
