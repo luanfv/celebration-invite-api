@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Invite } from './entities/invite.entity';
-import { AddressVO } from './value-object/address.vo';
+import { AddressVO } from './value-objects/address.vo';
 
 enum CelebrationStatusEnum {
   OPENED = 'OPENED',
