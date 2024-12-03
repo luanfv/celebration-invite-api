@@ -4,7 +4,9 @@ import { AddressVO } from './value-objects/address.vo';
 
 enum CelebrationStatusEnum {
   OPENED = 'OPENED',
+  CONFIRMED = 'CONFIRMED',
   CLOSED = 'CLOSED',
+  ABANDONED = 'ABANDONED',
 }
 
 type CelebrationProps = {
@@ -36,7 +38,7 @@ type CelebrationCreateProps = {
 };
 
 export class CelebrationAggregate {
-  private _id: string;
+  private readonly _id: string;
   private _props: CelebrationProps;
 
   private constructor(id: string, props: CelebrationProps) {
@@ -58,13 +60,7 @@ export class CelebrationAggregate {
       createdAt: new Date(),
       date,
       description,
-      invites: invites.map((invite) =>
-        Invite.create({
-          expireAt: invite.expireAt,
-          guests: invite.guests,
-          maxGuest: invite.maxGuest,
-        }),
-      ),
+      invites: [],
       status: CelebrationStatusEnum.OPENED,
       title,
     });

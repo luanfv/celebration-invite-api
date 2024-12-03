@@ -8,7 +8,7 @@ type GuestProps = {
 };
 
 export class Guest {
-  private _id: string;
+  private readonly _id: string;
   private _props: GuestProps;
 
   private constructor(id: string, props: GuestProps) {
