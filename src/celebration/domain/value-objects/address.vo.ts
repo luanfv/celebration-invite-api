@@ -2,7 +2,6 @@ export class AddressVO {
   readonly street: string;
   readonly zipCode: string;
   readonly number: number;
-  private readonly regexCEP = /^\d{5}-?\d{3}$/;
 
   constructor(street: string, zipCode: string, number: number) {
     if (!this.isZipCode(zipCode))
@@ -15,6 +14,6 @@ export class AddressVO {
   }
 
   private isZipCode(zipCode: string): boolean {
-    return this.regexCEP.test(zipCode);
+    return /^\d{5}-?\d{3}$/.test(zipCode);
   }
 }
