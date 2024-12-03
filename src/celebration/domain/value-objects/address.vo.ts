@@ -1,19 +1,20 @@
 export class AddressVO {
-  private readonly street: string;
-  private readonly cep: string;
-  private readonly number: number;
+  readonly street: string;
+  readonly zipCode: string;
+  readonly number: number;
   private readonly regexCEP = /^\d{5}-?\d{3}$/;
 
-  constructor(street: string, cep: string, number: number) {
-    if (!this.isCep(cep)) throw new Error('Address - invalid CEP');
-    if (1 > number) throw new Error('Address - invalid number');
+  constructor(street: string, zipCode: string, number: number) {
+    if (!this.isZipCode(zipCode))
+      throw new Error(`Address - zip code = ${zipCode} is invalid`);
+    if (1 > number) throw new Error(`Address - number = ${number} is invalid`);
 
     this.street = street;
-    this.cep = cep;
+    this.zipCode = zipCode;
     this.number = number;
   }
 
-  private isCep(cep: string): boolean {
-    return this.regexCEP.test(cep);
+  private isZipCode(zipCode: string): boolean {
+    return this.regexCEP.test(zipCode);
   }
 }

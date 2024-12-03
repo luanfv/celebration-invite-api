@@ -23,18 +23,9 @@ type CelebrationCreateProps = {
   title: string;
   description: string;
   date: Date;
-  addressCep: string;
+  addressZipCode: string;
   addressStreet: string;
   addressNumber: number;
-  invites: {
-    maxGuest: number;
-    guests: {
-      name: string;
-      age: number;
-      obligatory: boolean;
-    }[];
-    expireAt: Date;
-  }[];
 };
 
 export class CelebrationAggregate {
@@ -47,16 +38,15 @@ export class CelebrationAggregate {
   }
 
   static create({
-    addressCep,
+    addressZipCode,
     addressNumber,
     addressStreet,
     date,
     description,
     title,
-    invites,
   }: CelebrationCreateProps) {
     return new CelebrationAggregate(randomUUID(), {
-      address: new AddressVO(addressStreet, addressCep, addressNumber),
+      address: new AddressVO(addressStreet, addressZipCode, addressNumber),
       createdAt: new Date(),
       date,
       description,
@@ -64,5 +54,24 @@ export class CelebrationAggregate {
       status: CelebrationStatusEnum.OPENED,
       title,
     });
+  }
+
+  get values() {
+    return {
+      id: this._id,
+      title: this._props.title,
+      description: this._props.description,
+      date: this._props.date,
+      createAt: this._props.createdAt,
+      status: this._props.status.toString(),
+      address: {
+        zipCode: this._props.address.zipCode,
+        street: this._props.address.street,
+        number: this._props.address.number,
+      },
+      invites: this._props.invites
+        ? this._props.invites.map((invite) => invite.values)
+        : [],
+    };
   }
 }

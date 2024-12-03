@@ -56,7 +56,7 @@ export class Invite {
       guests: this._props.guests.map((guest) => guest.values),
       expireAt: this._props.expireAt,
       maxGuest: this._props.maxGuest,
-      status: this._props.status,
+      status: this._props.status.toString(),
     };
   }
 }
