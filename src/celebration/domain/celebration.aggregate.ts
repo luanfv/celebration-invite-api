@@ -28,6 +28,16 @@ type CelebrationCreateProps = {
   addressNumber: number;
 };
 
+type CelebrationRestoreProps = {
+  id: string;
+  title: string;
+  description: string;
+  date: Date;
+  addressZipCode: string;
+  addressStreet: string;
+  addressNumber: number;
+};
+
 export class CelebrationAggregate {
   private readonly _id: string;
   private _props: CelebrationProps;
@@ -46,6 +56,26 @@ export class CelebrationAggregate {
     title,
   }: CelebrationCreateProps) {
     return new CelebrationAggregate(randomUUID(), {
+      address: new AddressVO(addressStreet, addressZipCode, addressNumber),
+      createdAt: new Date(),
+      date,
+      description,
+      invites: [],
+      status: CelebrationStatusEnum.OPENED,
+      title,
+    });
+  }
+
+  static restore({
+    id,
+    addressZipCode,
+    addressNumber,
+    addressStreet,
+    date,
+    description,
+    title,
+  }: CelebrationRestoreProps) {
+    return new CelebrationAggregate(id, {
       address: new AddressVO(addressStreet, addressZipCode, addressNumber),
       createdAt: new Date(),
       date,
