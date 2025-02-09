@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCelebrationCommandHandler } from './create-celebration.command.handler';
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
-import { CelebrationMemoryRepository } from '../../../infra/data/repositories/celebration-memory.repository';
+import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
 import { CreateCelebrationCommand } from '../create-celebration.command';
 import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
 import { CelebrationAggregate } from '../../../domain/celebration.aggregate';

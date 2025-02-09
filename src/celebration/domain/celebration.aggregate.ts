@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { AddressVO } from './value-objects/address.vo';
+import { AddressVO } from './value-object/address.vo';
 
 enum CelebrationStatusEnum {
   OPENED = 'OPENED',

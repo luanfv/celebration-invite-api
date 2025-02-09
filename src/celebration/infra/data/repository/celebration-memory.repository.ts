@@ -1,4 +1,4 @@
-import { CelebrationEntity } from '../entities/celebration.entity';
+import { CelebrationEntity } from '../entity/celebration.entity';
 import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
 import { Injectable } from '@nestjs/common';
 import { CelebrationRepository } from '../../../application/repository/celebration-repository';
