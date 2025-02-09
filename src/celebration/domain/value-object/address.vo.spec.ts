@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker/.';
 import { AddressVO } from './address.vo';
+import { InvalidDataError } from '../error/invalid-data.error';
 
 describe('Address value object unit tests', () => {
   it('SHOULD create an address', () => {
@@ -21,7 +22,11 @@ describe('Address value object unit tests', () => {
     it(`SHOULD throw an error: Address - zip code = ${zipCodeInvalid} is invalid`, () => {
       expect(
         () => new AddressVO(faker.location.street(), zipCodeInvalid, 150),
-      ).toThrow(new Error(`Address - zip code = ${zipCodeInvalid} is invalid`));
+      ).toThrow(
+        new InvalidDataError(
+          `Address - zip code = ${zipCodeInvalid} is invalid`,
+        ),
+      );
     });
   });
 
@@ -36,7 +41,9 @@ describe('Address value object unit tests', () => {
             faker.location.zipCode('########'),
             numberInvalid,
           ),
-      ).toThrow(new Error(`Address - number = ${numberInvalid} is invalid`));
+      ).toThrow(
+        new InvalidDataError(`Address - number = ${numberInvalid} is invalid`),
+      );
     });
   });
 });
