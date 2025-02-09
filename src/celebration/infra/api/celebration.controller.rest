@@ -1,1 +1,13 @@
 POST http://localhost:3000/api/celebration
+content-type: application/json
+
+{
+    "title": "test",
+    "description": "abc",
+    "date": "01/01/2000",
+    "address": {
+        "zipCode": "11111111",
+        "street": "fake",
+        "number": 1
+    }
+}
