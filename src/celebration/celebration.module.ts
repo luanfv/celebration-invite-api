@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
+import { CelebrationMemoryRepository } from './infra/data/repositories/celebration-memory.repository';
 import { CelebrationController } from './infra/api/celebration.controller';
-import { CelebrationRepository } from './infra/data/repositories/celebration.repository';
 import { CreateCelebrationCommandHandler } from './application/commands/handlers/create-celebration.command.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [CqrsModule],
   controllers: [CelebrationController],
-  providers: [CelebrationRepository, CreateCelebrationCommandHandler],
+  providers: [CelebrationMemoryRepository, CreateCelebrationCommandHandler],
 })
 export class CelebrationModule {}

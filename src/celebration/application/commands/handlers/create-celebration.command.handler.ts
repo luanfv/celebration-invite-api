@@ -1,11 +1,19 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateCelebrationCommand } from '../create-celebration.command';
-import { CelebrationAggregate } from 'src/celebration/domain/celebration.aggregate';
+import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
+import { Inject } from '@nestjs/common';
+import { CelebrationMemoryRepository } from '../../../infra/data/repositories/celebration-memory.repository';
+import { CelebrationRepository } from '../../repository/celebration-repository';
 
 @CommandHandler(CreateCelebrationCommand)
 export class CreateCelebrationCommandHandler
   implements ICommandHandler<CreateCelebrationCommand>
 {
+  constructor(
+    @Inject(CelebrationMemoryRepository)
+    private readonly celebrationRepository: CelebrationRepository,
+  ) {}
+
   async execute(command: CreateCelebrationCommand): Promise<string> {
     const {
       addressNumber,
@@ -23,6 +31,7 @@ export class CreateCelebrationCommandHandler
       description,
       title,
     });
+    await this.celebrationRepository.save(celebration);
     return celebration.values.id;
   }
 }
