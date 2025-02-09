@@ -24,7 +24,6 @@ describe('Celebration aggregate unit tests', () => {
         street: expect.any(String),
         number: expect.any(Number),
       },
-      invites: [],
     });
   });
 
@@ -50,7 +49,6 @@ describe('Celebration aggregate unit tests', () => {
         street: expect.any(String),
         number: expect.any(Number),
       },
-      invites: [],
     });
   });
 });

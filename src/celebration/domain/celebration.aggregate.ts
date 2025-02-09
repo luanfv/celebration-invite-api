@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { Invite } from './entities/invite.entity';
 import { AddressVO } from './value-objects/address.vo';
 
 enum CelebrationStatusEnum {
@@ -14,7 +13,6 @@ type CelebrationProps = {
   status: CelebrationStatusEnum;
   description: string;
   address: AddressVO;
-  invites: Invite[];
   date: Date;
   createdAt: Date;
 };
@@ -60,7 +58,6 @@ export class CelebrationAggregate {
       createdAt: new Date(),
       date,
       description,
-      invites: [],
       status: CelebrationStatusEnum.OPENED,
       title,
     });
@@ -80,7 +77,6 @@ export class CelebrationAggregate {
       createdAt: new Date(),
       date,
       description,
-      invites: [],
       status: CelebrationStatusEnum.OPENED,
       title,
     });
@@ -99,9 +95,6 @@ export class CelebrationAggregate {
         street: this._props.address.street,
         number: this._props.address.number,
       },
-      invites: this._props.invites
-        ? this._props.invites.map((invite) => invite.values)
-        : [],
     };
   }
 }
