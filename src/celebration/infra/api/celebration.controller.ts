@@ -1,6 +1,6 @@
 import { Post, Controller, Body } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateCelebrationCommand } from 'src/celebration/application/command/create-celebration.command';
+import { CreateCelebrationCommand } from '../../application/command/create-celebration.command';
 import { CreateCelebrationDto } from './dto/create-celebration.dto';
 
 @Controller('/celebration')
