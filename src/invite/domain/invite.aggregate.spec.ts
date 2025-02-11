@@ -1,5 +1,6 @@
-import { Guest } from './guest.entity';
-import { Invite } from './invite.entity';
+import { randomUUID } from 'crypto';
+import { Guest } from './entity/guest.entity';
+import { Invite } from './invite.aggregate';
 import { faker } from '@faker-js/faker';
 
 describe('Invite entity unit tests', () => {
@@ -13,6 +14,7 @@ describe('Invite entity unit tests', () => {
       expireAt,
       maxGuest,
       guests,
+      celebrationId: randomUUID(),
     });
     expect(invite.values).toEqual({
       id: expect.any(String),
@@ -30,6 +32,7 @@ describe('Invite entity unit tests', () => {
           expireAt: faker.date.future(),
           maxGuest: 0,
           guests: [],
+          celebrationId: randomUUID(),
         }),
       ).toThrow(new Error('Invite - max guest cannot be less than 1'));
     });
@@ -46,6 +49,7 @@ describe('Invite entity unit tests', () => {
           expireAt: faker.date.future(),
           maxGuest: 1,
           guests,
+          celebrationId: randomUUID(),
         }),
       ).toThrow(new Error('Invite - guest list cannot be more than max guest'));
     });

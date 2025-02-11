@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { Guest } from './guest.entity';
+import { Guest } from './entity/guest.entity';
 
 enum InviteStatusEnum {
   PENDENT = 'PENDENT',
@@ -13,6 +13,7 @@ type InviteProps = {
   guests: Guest[];
   expireAt: Date;
   status: InviteStatusEnum;
+  celebrationId: string;
 };
 
 type InviteCreateProps = {
@@ -23,6 +24,7 @@ type InviteCreateProps = {
   }[];
   expireAt: Date;
   maxGuest: number;
+  celebrationId: string;
 };
 
 export class Invite {
@@ -34,7 +36,12 @@ export class Invite {
     this._props = props;
   }
 
-  static create({ expireAt, guests, maxGuest }: InviteCreateProps) {
+  static create({
+    expireAt,
+    guests,
+    maxGuest,
+    celebrationId,
+  }: InviteCreateProps) {
     if (0 >= maxGuest)
       throw new Error('Invite - max guest cannot be less than 1');
     if (guests.length > maxGuest)
@@ -47,6 +54,7 @@ export class Invite {
       ),
       maxGuest,
       status: InviteStatusEnum.PENDENT,
+      celebrationId,
     });
   }
 
