@@ -27,7 +27,7 @@ type InviteCreateProps = {
   celebrationId: string;
 };
 
-export class Invite {
+export class InviteAggregate {
   private readonly _id: string;
   private _props: InviteProps;
 
@@ -47,7 +47,7 @@ export class Invite {
     if (guests.length > maxGuest)
       throw new Error('Invite - guest list cannot be more than max guest');
 
-    return new Invite(randomUUID(), {
+    return new InviteAggregate(randomUUID(), {
       expireAt,
       guests: guests.map((guest) =>
         Guest.create(guest.name, guest.age, guest.obligatory),

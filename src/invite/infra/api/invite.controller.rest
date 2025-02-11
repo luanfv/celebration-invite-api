@@ -1,0 +1,8 @@
+POST http://localhost:3000/api/celebration/abc/invite
+content-type: application/json
+
+{
+    "maxGuest": 1,
+    "expireAt": "20/12/2026",
+    "guests": []
+}
