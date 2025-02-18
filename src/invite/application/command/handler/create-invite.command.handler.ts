@@ -3,13 +3,18 @@ import { CreateInviteCommand } from '../create-invite.command';
 import { InviteAggregate } from '../../../domain/invite.aggregate';
 import { CelebrationRepository } from '../../repository/celebration.repository';
 import { InviteRepository } from '../../repository/invite.repository';
+import { CelebrationMemoryRepository } from '../../../infra/repository/celebration-memory.repository';
+import { Inject } from '@nestjs/common';
+import { InviteMemoryRepository } from '../../../infra/repository/invite-memory.repository';
 
 @CommandHandler(CreateInviteCommand)
 export class CreateInviteCommandHandler
   implements ICommandHandler<CreateInviteCommand>
 {
   constructor(
+    @Inject(CelebrationMemoryRepository)
     private readonly celebrationRepository: CelebrationRepository,
+    @Inject(InviteMemoryRepository)
     private readonly inviteRepository: InviteRepository,
   ) {}
 
