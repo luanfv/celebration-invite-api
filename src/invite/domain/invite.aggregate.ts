@@ -20,7 +20,7 @@ type InviteCreateProps = {
   guests: {
     name: string;
     age: number;
-    obligatory: boolean;
+    obligatory?: boolean;
   }[];
   expireAt: Date;
   maxGuest: number;

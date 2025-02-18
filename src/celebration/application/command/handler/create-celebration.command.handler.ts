@@ -3,7 +3,7 @@ import { CreateCelebrationCommand } from '../create-celebration.command';
 import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
 import { Inject } from '@nestjs/common';
 import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
-import { CelebrationRepository } from '../../repository/celebration-repository';
+import { CelebrationRepository } from '../../repository/celebration.repository';
 
 @CommandHandler(CreateCelebrationCommand)
 export class CreateCelebrationCommandHandler

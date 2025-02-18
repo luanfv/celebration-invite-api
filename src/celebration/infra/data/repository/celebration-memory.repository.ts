@@ -1,7 +1,7 @@
 import { CelebrationEntity } from '../entity/celebration.entity';
 import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
 import { Injectable } from '@nestjs/common';
-import { CelebrationRepository } from '../../../application/repository/celebration-repository';
+import { CelebrationRepository } from '../../../application/repository/celebration.repository';
 
 @Injectable()
 export class CelebrationMemoryRepository implements CelebrationRepository {

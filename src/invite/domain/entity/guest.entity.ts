@@ -16,7 +16,7 @@ export class Guest {
     this._props = props;
   }
 
-  static create(name: string, age: number, obligatory: boolean) {
+  static create(name: string, age: number, obligatory: boolean = false) {
     if (0 > age) throw new Error('Guest - cannot be less than 0 age');
 
     return new Guest(randomUUID(), {
