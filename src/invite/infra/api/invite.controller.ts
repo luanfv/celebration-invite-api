@@ -3,15 +3,25 @@ import {
   CreateInviteBodyDto,
   CreateInviteParamsDto,
 } from './dto/create-invite.dto';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateInviteCommand } from '../../application/command/create-invite.command';
 
 @Controller('')
 export class InviteController {
+  constructor(private readonly commandBus: CommandBus) {}
+
   @Post('/celebration/:celebrationId/invite')
-  create(
+  async create(
     @Param() { celebrationId }: CreateInviteParamsDto,
     @Body() { expireAt, guests, maxGuest }: CreateInviteBodyDto,
   ) {
-    console.log('>>>> params:', celebrationId);
-    console.log('>>>> body:', expireAt, guests, maxGuest);
+    const command = new CreateInviteCommand(
+      celebrationId,
+      guests,
+      maxGuest,
+      expireAt,
+    );
+    const id = await this.commandBus.execute(command);
+    return { id };
   }
 }
