@@ -1,16 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { CelebrationModule } from '../../celebration.module';
+import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { CreateCelebrationDto } from './dto/create-celebration.dto';
 import { faker } from '@faker-js/faker/.';
+import { AppModule } from '../../../app.module';
 
 describe('CelebrationController integration tests', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [CelebrationModule],
+      imports: [AppModule],
     }).compile();
     app = module.createNestApplication();
     await app.init();
@@ -38,7 +38,7 @@ describe('CelebrationController integration tests', () => {
         .expect(HttpStatus.CREATED);
     });
 
-    describe('WHEN has error', () => {
+    describe('WHEN has an exception', () => {
       it('SHOULD return formatted', async () => {
         const response = await request(app.getHttpServer())
           .post('/celebration')
@@ -53,7 +53,7 @@ describe('CelebrationController integration tests', () => {
       });
     });
 
-    describe('WHEN has the invalid data by domain error', () => {
+    describe('WHEN has the invalid data', () => {
       it('SHOULD return status code 406', async () => {
         const body: CreateCelebrationDto = {
           date: new Date(),

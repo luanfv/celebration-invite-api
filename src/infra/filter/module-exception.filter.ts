@@ -6,7 +6,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { InvalidDataError } from '../../domain/error/invalid-data.error';
 
 @Catch()
 export class ModuleExceptionsFilter implements ExceptionFilter {
@@ -31,11 +30,6 @@ export class ModuleExceptionsFilter implements ExceptionFilter {
           ? response.message
           : [response.message];
       }
-    }
-
-    if (exception instanceof InvalidDataError) {
-      status = HttpStatus.NOT_ACCEPTABLE;
-      message = [exception.message];
     }
 
     response.status(status).json({

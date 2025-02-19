@@ -6,7 +6,7 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateInviteCommand } from '../../application/command/create-invite.command';
 
-@Controller('')
+@Controller()
 export class InviteController {
   constructor(private readonly commandBus: CommandBus) {}
 

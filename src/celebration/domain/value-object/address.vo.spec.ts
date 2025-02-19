@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/.';
 import { AddressVO } from './address.vo';
-import { InvalidDataError } from '../error/invalid-data.error';
+import { NotAcceptableException } from '@nestjs/common';
 
 describe('Address value object unit tests', () => {
   it('SHOULD create an address', () => {
@@ -23,7 +23,7 @@ describe('Address value object unit tests', () => {
       expect(
         () => new AddressVO(faker.location.street(), zipCodeInvalid, 150),
       ).toThrow(
-        new InvalidDataError(
+        new NotAcceptableException(
           `Address - zip code = ${zipCodeInvalid} is invalid`,
         ),
       );
@@ -42,7 +42,9 @@ describe('Address value object unit tests', () => {
             numberInvalid,
           ),
       ).toThrow(
-        new InvalidDataError(`Address - number = ${numberInvalid} is invalid`),
+        new NotAcceptableException(
+          `Address - number = ${numberInvalid} is invalid`,
+        ),
       );
     });
   });

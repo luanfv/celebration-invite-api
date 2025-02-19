@@ -5,6 +5,7 @@ import { CelebrationMemoryRepository } from '../../../infra/repository/celebrati
 import { InviteMemoryRepository } from '../../../infra/repository/invite-memory.repository';
 import { CreateInviteCommand } from '../create-invite.command';
 import { randomUUID } from 'node:crypto';
+import { NotFoundException } from '@nestjs/common';
 
 describe('CreateInviteCommandHandler integration tests', () => {
   let module: TestingModule;
@@ -55,15 +56,15 @@ describe('CreateInviteCommandHandler integration tests', () => {
   });
 
   describe('WHEN celebration do not exists', () => {
-    it('SHOULD throw an error: Celebration do not exists', async () => {
+    it('SHOULD throw an not found exception: Celebration do not exists', async () => {
       const commandBus = module.get(CommandBus);
       const celebrationRepository = module.get(CelebrationMemoryRepository);
       jest
         .spyOn(celebrationRepository, 'isExists')
         .mockResolvedValueOnce(false);
       const command = new CreateInviteCommand(randomUUID(), [], 1, new Date());
-      await expect(commandBus.execute(command)).rejects.toEqual(
-        new Error('Celebration do not exists'),
+      await expect(commandBus.execute(command)).rejects.toStrictEqual(
+        new NotFoundException('Celebration do not exists'),
       );
     });
   });

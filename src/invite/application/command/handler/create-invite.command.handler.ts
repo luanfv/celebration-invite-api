@@ -4,7 +4,7 @@ import { InviteAggregate } from '../../../domain/invite.aggregate';
 import { CelebrationRepository } from '../../repository/celebration.repository';
 import { InviteRepository } from '../../repository/invite.repository';
 import { CelebrationMemoryRepository } from '../../../infra/repository/celebration-memory.repository';
-import { Inject } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { InviteMemoryRepository } from '../../../infra/repository/invite-memory.repository';
 
 @CommandHandler(CreateInviteCommand)
@@ -22,7 +22,8 @@ export class CreateInviteCommandHandler
     const hasCelebration = await this.celebrationRepository.isExists(
       command.celebrationId,
     );
-    if (!hasCelebration) throw new Error('Celebration do not exists');
+    if (!hasCelebration)
+      throw new NotFoundException('Celebration do not exists');
     const invite = InviteAggregate.create({
       celebrationId: command.celebrationId,
       expireAt: command.expireAt,
