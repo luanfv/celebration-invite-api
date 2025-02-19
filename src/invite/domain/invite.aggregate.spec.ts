@@ -1,5 +1,6 @@
-import { Guest } from './guest.entity';
-import { Invite } from './invite.entity';
+import { randomUUID } from 'crypto';
+import { Guest } from './entity/guest.entity';
+import { InviteAggregate } from './invite.aggregate';
 import { faker } from '@faker-js/faker';
 
 describe('Invite entity unit tests', () => {
@@ -9,10 +10,11 @@ describe('Invite entity unit tests', () => {
     ${faker.date.future()} | ${1}     | ${[Guest.create(faker.person.fullName(), 18, true).values]}
     ${faker.date.future()} | ${2}     | ${[Guest.create(faker.person.fullName(), 30, true).values]}
   `('SHOULD create an invite', ({ expireAt, maxGuest, guests }) => {
-    const invite = Invite.create({
+    const invite = InviteAggregate.create({
       expireAt,
       maxGuest,
       guests,
+      celebrationId: randomUUID(),
     });
     expect(invite.values).toEqual({
       id: expect.any(String),
@@ -26,10 +28,11 @@ describe('Invite entity unit tests', () => {
   describe('WHEN max guest is less than 1', () => {
     it('SHOULD throw an error: Invite - max guest cannot be less than 1', () => {
       expect(() =>
-        Invite.create({
+        InviteAggregate.create({
           expireAt: faker.date.future(),
           maxGuest: 0,
           guests: [],
+          celebrationId: randomUUID(),
         }),
       ).toThrow(new Error('Invite - max guest cannot be less than 1'));
     });
@@ -42,10 +45,11 @@ describe('Invite entity unit tests', () => {
         Guest.create(faker.person.fullName(), 20, true).values,
       ];
       expect(() =>
-        Invite.create({
+        InviteAggregate.create({
           expireAt: faker.date.future(),
           maxGuest: 1,
           guests,
+          celebrationId: randomUUID(),
         }),
       ).toThrow(new Error('Invite - guest list cannot be more than max guest'));
     });
