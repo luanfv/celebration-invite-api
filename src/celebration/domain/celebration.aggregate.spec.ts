@@ -17,7 +17,7 @@ describe('Celebration aggregate unit tests', () => {
       title: expect.any(String),
       description: expect.any(String),
       date: expect.any(Date),
-      createAt: expect.any(Date),
+      createdAt: expect.any(Date),
       updatedAt: expect.any(Date),
       status: expect.any(String),
       address: {
@@ -51,7 +51,7 @@ describe('Celebration aggregate unit tests', () => {
           title: expect.any(String),
           description: expect.any(String),
           date: expect.any(Date),
-          createAt: expect.any(Date),
+          createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
           status: expect.any(String),
           address: {

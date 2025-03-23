@@ -100,7 +100,7 @@ export class CelebrationAggregate {
       title: this._props.title,
       description: this._props.description,
       date: this._props.date,
-      createAt: this._props.createdAt,
+      createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
       status: this._props.status.toString(),
       address: {

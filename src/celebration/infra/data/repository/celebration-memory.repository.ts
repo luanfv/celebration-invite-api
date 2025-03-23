@@ -15,7 +15,7 @@ export class CelebrationMemoryRepository implements CelebrationRepository {
       id,
       status,
       title,
-      createAt,
+      createdAt,
       updatedAt,
     } = celebration.values;
     this._celebration.push(
@@ -26,7 +26,7 @@ export class CelebrationMemoryRepository implements CelebrationRepository {
         description,
         address,
         date,
-        createAt,
+        createdAt,
         updatedAt,
       ),
     );
