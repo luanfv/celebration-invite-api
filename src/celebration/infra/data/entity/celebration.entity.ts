@@ -11,5 +11,6 @@ export class CelebrationEntity {
     },
     readonly date: Date,
     readonly createdAt: Date,
+    readonly updatedAt: Date,
   ) {}
 }

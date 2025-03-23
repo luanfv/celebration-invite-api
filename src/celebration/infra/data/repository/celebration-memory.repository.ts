@@ -8,8 +8,16 @@ export class CelebrationMemoryRepository implements CelebrationRepository {
   private _celebration: CelebrationEntity[] = [];
 
   async save(celebration: CelebrationAggregate) {
-    const { address, date, description, id, status, title, createAt } =
-      celebration.values;
+    const {
+      address,
+      date,
+      description,
+      id,
+      status,
+      title,
+      createAt,
+      updatedAt,
+    } = celebration.values;
     this._celebration.push(
       new CelebrationEntity(
         id,
@@ -19,6 +27,7 @@ export class CelebrationMemoryRepository implements CelebrationRepository {
         address,
         date,
         createAt,
+        updatedAt,
       ),
     );
   }
@@ -35,6 +44,9 @@ export class CelebrationMemoryRepository implements CelebrationRepository {
       date: celebration.date,
       description: celebration.description,
       title: celebration.title,
+      status: celebration.status,
+      createdAt: celebration.createdAt,
+      updatedAt: celebration.updatedAt,
     });
   }
 }
