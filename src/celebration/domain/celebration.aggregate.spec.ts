@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker/.';
 import { CelebrationAggregate } from './celebration.aggregate';
 import { randomUUID } from 'node:crypto';
 import { CelebrationStatusEnum } from './state';
+import { CelebrationAggregateBuilder } from './celebration.aggregate.builder';
 
 describe('Celebration aggregate unit tests', () => {
   it('SHOULD create a celebration', () => {
@@ -80,6 +81,14 @@ describe('Celebration aggregate unit tests', () => {
           }),
         ).toThrow(new Error(`Celebration - status equal ${status} not exists`));
       });
+    });
+  });
+
+  describe('changeToConfirmed', () => {
+    it('SHOULD update the status to CONFIRMED', () => {
+      const celebration = new CelebrationAggregateBuilder().build();
+      celebration.changeToConfirmed();
+      expect(celebration.status).toEqual('CONFIRMED');
     });
   });
 });

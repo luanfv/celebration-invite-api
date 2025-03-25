@@ -136,8 +136,8 @@ export class CelebrationAggregate {
   }
 
   changeToConfirmed() {
-    this._props.updatedAt = new Date();
     this._props.status.confirm(this);
+    this._props.updatedAt = new Date();
     // send event
   }
 }
