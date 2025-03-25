@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker/.';
 import { CelebrationAggregate } from './celebration.aggregate';
 import { randomUUID } from 'node:crypto';
+import { CelebrationStatusEnum } from './state';
 
 describe('Celebration aggregate unit tests', () => {
   it('SHOULD create a celebration', () => {
@@ -29,9 +30,7 @@ describe('Celebration aggregate unit tests', () => {
   });
 
   describe('restore', () => {
-    const celebrationStatus = ['OPENED', 'CONFIRMED', 'CLOSED', 'ABANDONED'];
-
-    it.each(celebrationStatus)(
+    it.each(Object.values(CelebrationStatusEnum))(
       'SHOULD restore a celebration (status = %p)',
       (status) => {
         const celebration = CelebrationAggregate.restore({
@@ -79,7 +78,7 @@ describe('Celebration aggregate unit tests', () => {
             updatedAt: new Date(),
             status,
           }),
-        ).toThrow(new Error(`Celebration - status = ${status} is invalid`));
+        ).toThrow(new Error(`Celebration - status equal ${status} not exists`));
       });
     });
   });

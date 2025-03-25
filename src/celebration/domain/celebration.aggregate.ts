@@ -1,16 +1,17 @@
 import { randomUUID } from 'node:crypto';
 import { AddressVO } from './value-object/address.vo';
-
-enum CelebrationStatusEnum {
-  OPENED = 'OPENED',
-  CONFIRMED = 'CONFIRMED',
-  CLOSED = 'CLOSED',
-  ABANDONED = 'ABANDONED',
-}
+import {
+  AbandonedStatusState,
+  CelebrationStatusEnum,
+  ClosedStatusState,
+  ConfirmedStatusState,
+  OpenedStatusState,
+  StatusState,
+} from './state';
 
 type CelebrationProps = {
   title: string;
-  status: CelebrationStatusEnum;
+  status: StatusState;
   description: string;
   address: AddressVO;
   date: Date;
@@ -63,7 +64,7 @@ export class CelebrationAggregate {
       updatedAt: new Date(),
       date,
       description,
-      status: CelebrationStatusEnum.OPENED,
+      status: this.generateStatus(CelebrationStatusEnum.OPENED),
       title,
     });
   }
@@ -80,18 +81,41 @@ export class CelebrationAggregate {
     createdAt,
     updatedAt,
   }: CelebrationRestoreProps) {
-    const statusFound = CelebrationStatusEnum[status];
-    if (!statusFound)
-      throw new Error(`Celebration - status = ${status} is invalid`);
     return new CelebrationAggregate(id, {
       address: new AddressVO(addressStreet, addressZipCode, addressNumber),
       date,
       description,
-      status: statusFound,
+      status: this.generateStatus(status),
       title,
       updatedAt,
       createdAt,
     });
+  }
+
+  static generateStatus(status: string) {
+    const statusFound: CelebrationStatusEnum = CelebrationStatusEnum[status];
+    if (!statusFound)
+      throw new Error(`Celebration - status equal ${status} not exists`);
+    switch (statusFound) {
+      case CelebrationStatusEnum.OPENED:
+        return new OpenedStatusState();
+      case CelebrationStatusEnum.ABANDONED:
+        return new AbandonedStatusState();
+      case CelebrationStatusEnum.CLOSED:
+        return new ClosedStatusState();
+      case CelebrationStatusEnum.CONFIRMED:
+        return new ConfirmedStatusState();
+      default:
+        return new OpenedStatusState();
+    }
+  }
+
+  set status(status: StatusState) {
+    this._props.status = status;
+  }
+
+  get status(): string {
+    return this._props.status.value;
   }
 
   get values() {
@@ -102,7 +126,7 @@ export class CelebrationAggregate {
       date: this._props.date,
       createdAt: this._props.createdAt,
       updatedAt: this._props.updatedAt,
-      status: this._props.status.toString(),
+      status: this._props.status.value,
       address: {
         zipCode: this._props.address.zipCode,
         street: this._props.address.street,
@@ -112,20 +136,8 @@ export class CelebrationAggregate {
   }
 
   changeToConfirmed() {
-    switch (this._props.status) {
-      case CelebrationStatusEnum.CONFIRMED:
-        return undefined;
-      case CelebrationStatusEnum.ABANDONED:
-      case CelebrationStatusEnum.CLOSED:
-        throw new Error(
-          `Celebration - cannot confirm with status equal ${this._props.status}`,
-        );
-      default:
-        break;
-    }
-
-    this._props.status = CelebrationStatusEnum.CONFIRMED;
     this._props.updatedAt = new Date();
+    this._props.status.confirm(this);
     // send event
   }
 }
