@@ -92,7 +92,7 @@ export class CelebrationAggregate {
     });
   }
 
-  static generateStatus(status: string) {
+  private static generateStatus(status: string) {
     const statusFound: CelebrationStatusEnum = CelebrationStatusEnum[status];
     if (!statusFound)
       throw new Error(`Celebration - status equal ${status} not exists`);
