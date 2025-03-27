@@ -8,6 +8,8 @@ import {
   OpenedStatusState,
   StatusState,
 } from './state';
+import { AggregateRoot } from '@nestjs/cqrs';
+import { ConfirmCelebrationEvent } from './event/confirm-celebration.event';
 
 type CelebrationProps = {
   title: string;
@@ -41,11 +43,12 @@ type CelebrationRestoreProps = {
   createdAt: Date;
 };
 
-export class CelebrationAggregate {
+export class CelebrationAggregate extends AggregateRoot {
   private readonly _id: string;
   private _props: CelebrationProps;
 
   private constructor(id: string, props: CelebrationProps) {
+    super();
     this._id = id;
     this._props = props;
   }
@@ -138,6 +141,6 @@ export class CelebrationAggregate {
   changeToConfirmed() {
     this._props.status.confirm(this);
     this._props.updatedAt = new Date();
-    // send event
+    this.apply(new ConfirmCelebrationEvent(this));
   }
 }
