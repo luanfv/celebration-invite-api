@@ -14,7 +14,7 @@ export class ConfirmCelebrationCommandHandler
     private readonly publisher: EventPublisher,
   ) {}
 
-  async execute(command: ConfirmCelebrationCommand): Promise<void> {
+  async execute(command: ConfirmCelebrationCommand): Promise<string> {
     const celebration = this.publisher.mergeObjectContext(
       await this.celebrationRepository.findById(command.id),
     );
@@ -22,5 +22,6 @@ export class ConfirmCelebrationCommandHandler
     celebration.changeToConfirmed();
     await this.celebrationRepository.save(celebration);
     celebration.commit();
+    return celebration.values.id;
   }
 }
