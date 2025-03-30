@@ -1,6 +1,10 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { ConfirmCelebrationCommand } from '../confirm-celebration.command';
-import { Inject, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
 import { CelebrationRepository } from '../../repository/celebration.repository';
 
@@ -23,12 +27,16 @@ export class ConfirmCelebrationCommandHandler
     const celebration = this.publisher.mergeObjectContext(
       celebrationFromRepository,
     );
-    celebration.changeToConfirmed();
-    await this.celebrationRepository.updateById(
-      celebration.values.id,
-      celebration,
-    );
-    celebration.commit();
-    return celebration.values.id;
+    try {
+      celebration.changeToConfirmed();
+      await this.celebrationRepository.updateById(
+        celebration.values.id,
+        celebration,
+      );
+      celebration.commit();
+      return celebration.values.id;
+    } catch (err) {
+      throw new UnprocessableEntityException(err.message);
+    }
   }
 }

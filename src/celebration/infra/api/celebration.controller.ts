@@ -1,7 +1,9 @@
-import { Post, Controller, Body } from '@nestjs/common';
+import { Post, Controller, Body, Patch, Param } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateCelebrationCommand } from '../../application/command/create-celebration.command';
 import { CreateCelebrationDto } from './dto/create-celebration.dto';
+import { ConfirmCelebrationParamDto } from './dto/confirm-celebration.dto';
+import { ConfirmCelebrationCommand } from '../../application/command/confirm-celebration.command';
 
 @Controller('/celebration')
 export class CelebrationController {
@@ -19,6 +21,15 @@ export class CelebrationController {
       address.street,
       address.number,
     );
+    const id = await this.commandBus.execute(command);
+    return {
+      id,
+    };
+  }
+
+  @Patch('/:celebrationId/confirm')
+  async confirm(@Param() { celebrationId }: ConfirmCelebrationParamDto) {
+    const command = new ConfirmCelebrationCommand(celebrationId);
     const id = await this.commandBus.execute(command);
     return {
       id,

@@ -11,3 +11,9 @@ content-type: application/json
         "number": 1
     }
 }
+
+
+###
+
+PATCH http://localhost:3000/api/celebration/da3cba36-03bb-43be-87b6-1aed2b3ecb54/confirm
+content-type: application/json
