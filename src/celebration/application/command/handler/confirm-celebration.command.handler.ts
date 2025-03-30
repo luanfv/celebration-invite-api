@@ -15,12 +15,19 @@ export class ConfirmCelebrationCommandHandler
   ) {}
 
   async execute(command: ConfirmCelebrationCommand): Promise<string> {
-    const celebration = this.publisher.mergeObjectContext(
-      await this.celebrationRepository.findById(command.id),
+    const celebrationFromRepository = await this.celebrationRepository.findById(
+      command.id,
     );
-    if (!celebration) throw new NotFoundException('Celebration not found');
+    if (!celebrationFromRepository)
+      throw new NotFoundException('Celebration not found');
+    const celebration = this.publisher.mergeObjectContext(
+      celebrationFromRepository,
+    );
     celebration.changeToConfirmed();
-    await this.celebrationRepository.save(celebration);
+    await this.celebrationRepository.updateById(
+      celebration.values.id,
+      celebration,
+    );
     celebration.commit();
     return celebration.values.id;
   }

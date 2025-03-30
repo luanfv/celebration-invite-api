@@ -3,6 +3,7 @@ import { CelebrationAggregate } from './celebration.aggregate';
 import { randomUUID } from 'node:crypto';
 import { CelebrationStatusEnum } from './state';
 import { CelebrationAggregateBuilder } from './celebration.aggregate.builder';
+import { ConfirmCelebrationEvent } from './event/confirm-celebration.event';
 
 describe('Celebration aggregate unit tests', () => {
   describe('create', () => {
@@ -93,6 +94,13 @@ describe('Celebration aggregate unit tests', () => {
       expect(celebration.status).toEqual('CONFIRMED');
     });
 
-    it.todo('SHOULD apply the ConfirmCelebrationEvent');
+    it('SHOULD apply the ConfirmCelebrationEvent', () => {
+      const celebration = new CelebrationAggregateBuilder().build();
+      const spyApply = jest.spyOn(celebration, 'apply');
+      celebration.changeToConfirmed();
+      expect(spyApply).toHaveBeenCalledWith(
+        new ConfirmCelebrationEvent(celebration),
+      );
+    });
   });
 });

@@ -1,17 +1,85 @@
+import { CommandBus, CqrsModule } from '@nestjs/cqrs';
+import { ConfirmCelebrationCommandHandler } from './confirm-celebration.command.handler';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ConfirmCelebrationCommand } from '../confirm-celebration.command';
+import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
+import { CelebrationRepository } from '../../repository/celebration.repository';
+import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
+import { randomUUID } from 'node:crypto';
+import { NotFoundException } from '@nestjs/common';
+
 describe('ConfirmCelebrationCommandHandler integration tests', () => {
-  it.todo(
-    'SHOULD save the celebration with status equal CONFIRMED on the repository',
-  );
+  let module: TestingModule;
+  const celebrationRepository: CelebrationRepository =
+    new CelebrationMemoryRepository();
 
-  it.todo('SHOULD commit the ConfirmCelebrationEvent');
+  beforeAll(async () => {
+    module = await Test.createTestingModule({
+      imports: [CqrsModule],
+      providers: [
+        ConfirmCelebrationCommandHandler,
+        CelebrationMemoryRepository,
+      ],
+    })
+      .overrideProvider(CelebrationMemoryRepository)
+      .useValue(celebrationRepository)
+      .compile();
 
-  it.todo('SHOULD return the celebration id');
+    await module.init();
+  });
+
+  afterAll(async () => {
+    await module.close();
+  });
+
+  it('SHOULD save the celebration with status equal CONFIRMED on the repository', async () => {
+    const expectedResult = 'CONFIRMED';
+    const commandBus = module.get(CommandBus);
+    const repository = module.get<CelebrationRepository>(
+      CelebrationMemoryRepository,
+    );
+    const celebration = new CelebrationAggregateBuilder().build();
+    await repository.save(celebration);
+    expect(celebration.status).not.toEqual(expectedResult);
+    await commandBus.execute(
+      new ConfirmCelebrationCommand(celebration.values.id),
+    );
+    const celebrationFromRepository = await repository.findById(
+      celebration.values.id,
+    );
+    expect(celebrationFromRepository.status).toEqual(expectedResult);
+  });
+
+  it('SHOULD return the celebration id', async () => {
+    const commandBus = module.get(CommandBus);
+    const repository = module.get<CelebrationRepository>(
+      CelebrationMemoryRepository,
+    );
+    const celebration = new CelebrationAggregateBuilder().build();
+    await repository.save(celebration);
+    await expect(
+      commandBus.execute(new ConfirmCelebrationCommand(celebration.values.id)),
+    ).resolves.toEqual(celebration.values.id);
+  });
 
   describe('WHEN not found celebration on repository', () => {
-    it.todo('SHOULD thrown an exception');
+    it('SHOULD thrown an exception', async () => {
+      const commandBus = module.get(CommandBus);
+      await expect(
+        commandBus.execute(new ConfirmCelebrationCommand(randomUUID())),
+      ).rejects.toThrow(new NotFoundException('Celebration not found'));
+    });
   });
 
   describe('WHEN call ConfirmCelebrationCommand', () => {
-    it.todo('SHOULD execute this command handler');
+    it('SHOULD execute this command handler', async () => {
+      const commandBus = module.get(CommandBus);
+      const commandHandler = module.get(ConfirmCelebrationCommandHandler);
+      const spyCommandHandler = jest.spyOn(commandHandler, 'execute');
+      await commandBus
+        .execute(new ConfirmCelebrationCommand(randomUUID()))
+        .catch(() => {});
+      expect(spyCommandHandler).toHaveBeenCalledTimes(1);
+    });
   });
 });
