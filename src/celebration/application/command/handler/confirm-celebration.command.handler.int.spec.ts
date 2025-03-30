@@ -6,7 +6,16 @@ import { CelebrationMemoryRepository } from '../../../infra/data/repository/cele
 import { CelebrationRepository } from '../../repository/celebration.repository';
 import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
 import { randomUUID } from 'node:crypto';
-import { NotFoundException } from '@nestjs/common';
+import {
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import {
+  AbandonedStatusState,
+  ClosedStatusState,
+  ConfirmedStatusState,
+  StatusState,
+} from '../../../domain/state';
 
 describe('ConfirmCelebrationCommandHandler integration tests', () => {
   let module: TestingModule;
@@ -68,6 +77,34 @@ describe('ConfirmCelebrationCommandHandler integration tests', () => {
       await expect(
         commandBus.execute(new ConfirmCelebrationCommand(randomUUID())),
       ).rejects.toThrow(new NotFoundException('Celebration not found'));
+    });
+  });
+
+  describe('WHEN celebration has not OFFERED status', () => {
+    const celebrationStatus: StatusState[] = [
+      new ClosedStatusState(),
+      new AbandonedStatusState(),
+      new ConfirmedStatusState(),
+    ];
+
+    it.each(celebrationStatus)('SHOULD thrown an exception', async (status) => {
+      const commandBus = module.get(CommandBus);
+      const repository = module.get<CelebrationRepository>(
+        CelebrationMemoryRepository,
+      );
+      const celebration = new CelebrationAggregateBuilder()
+        .withStatus(status)
+        .build();
+      await repository.save(celebration);
+      await expect(
+        commandBus.execute(
+          new ConfirmCelebrationCommand(celebration.values.id),
+        ),
+      ).rejects.toEqual(
+        new UnprocessableEntityException(
+          `Cannot confirm celebration with status equal ${status.value}`,
+        ),
+      );
     });
   });
 
