@@ -1,6 +1,10 @@
 import { CelebrationAggregate } from '../../domain/celebration.aggregate';
 
 export interface CelebrationRepository {
-  save(celebration: CelebrationAggregate): Promise<void>;
+  save(celebration: CelebrationAggregate): Promise<CelebrationAggregate>;
+  updateById(
+    id: string,
+    celebration: CelebrationAggregate,
+  ): Promise<CelebrationAggregate>;
   findById(id: string): Promise<CelebrationAggregate>;
 }
