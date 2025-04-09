@@ -138,6 +138,14 @@ export class CelebrationAggregate extends AggregateRoot {
     };
   }
 
+  isAbandoned() {
+    return this.status === CelebrationStatusEnum.ABANDONED;
+  }
+
+  isClosed() {
+    return this.status === CelebrationStatusEnum.CLOSED;
+  }
+
   changeToConfirmed() {
     this._props.status.confirm(this);
     this._props.updatedAt = new Date();

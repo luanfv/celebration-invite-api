@@ -33,6 +33,10 @@ export class InviteAggregate {
     { guestName }: InviteCreateProps,
     celebration: CelebrationAggregate,
   ) {
+    if (celebration.isAbandoned())
+      throw new Error('Cannot create invite to abandoned celebration');
+    if (celebration.isClosed())
+      throw new Error('Cannot create invite to closed celebration');
     const id = randomUUID();
     return new InviteAggregate(id, {
       expireAt: celebration.values.date,
