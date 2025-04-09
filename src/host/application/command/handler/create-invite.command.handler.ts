@@ -12,7 +12,8 @@ import { InviteRepository } from '../../repository/invite.repository';
 import { InviteMemoryRepository } from '../../../infra/data/repository/invite-memory.repository';
 import { GuestRepository } from '../../repository/guest.repository';
 import { GuestMemoryRepository } from '../../../infra/data/repository/guest-memory.repository';
-import { CelebrationAggregate } from 'src/host/domain/celebration.aggregate';
+import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
+import { Guest } from '../../../domain/entity/guest.entity';
 
 @CommandHandler(CreateInviteCommand)
 export class CreateInviteCommandHandler
@@ -34,16 +35,26 @@ export class CreateInviteCommandHandler
     const celebration =
       await this.celebrationRepository.findById(celebrationId);
     if (!celebration) throw new NotFoundException('Celebration not found');
-    const invite = this.generateInvite(guestName, celebration);
+    const { invite, guest } = this.generateInviteAndGuest(
+      guestName,
+      celebration,
+    );
     await this.inviteRepository.save(invite);
-    await this.guestRepository.save(invite.guest);
+    await this.guestRepository.save(guest);
     return invite.values.id;
   }
 
-  private generateInvite(guestName: string, celebration: CelebrationAggregate) {
+  private generateInviteAndGuest(
+    guestName: string,
+    celebration: CelebrationAggregate,
+  ): {
+    invite: InviteAggregate;
+    guest: Guest;
+  } {
     try {
-      const invite = InviteAggregate.create({ guestName }, celebration);
-      return invite;
+      const invite = InviteAggregate.create(celebration);
+      const guest = Guest.create(guestName, invite);
+      return { invite, guest };
     } catch (err) {
       throw new UnprocessableEntityException(err?.message);
     }

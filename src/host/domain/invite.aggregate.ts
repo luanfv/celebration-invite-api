@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { Guest } from './entity/guest.entity';
 import { CelebrationAggregate } from './celebration.aggregate';
 
 enum InviteStatusEnum {
@@ -10,14 +9,10 @@ enum InviteStatusEnum {
 }
 
 type InviteProps = {
-  guest: Guest;
+  guestId?: string;
   expireAt: Date;
   status: InviteStatusEnum;
   celebrationId: string;
-};
-
-type InviteCreateProps = {
-  guestName: string;
 };
 
 export class InviteAggregate {
@@ -29,10 +24,7 @@ export class InviteAggregate {
     this._props = props;
   }
 
-  static create(
-    { guestName }: InviteCreateProps,
-    celebration: CelebrationAggregate,
-  ) {
+  static create(celebration: CelebrationAggregate) {
     if (celebration.isAbandoned())
       throw new Error('Cannot create invite to abandoned celebration');
     if (celebration.isClosed())
@@ -40,20 +32,23 @@ export class InviteAggregate {
     const id = randomUUID();
     return new InviteAggregate(id, {
       expireAt: celebration.values.date,
-      guest: Guest.create(guestName, id),
       status: InviteStatusEnum.PENDENT,
       celebrationId: celebration.values.id,
     });
   }
 
-  get guest() {
-    return this._props.guest;
+  set guestId(guestId: string) {
+    this._props.guestId = guestId;
+  }
+
+  get status() {
+    return this._props.status.toString();
   }
 
   get values() {
     return {
       id: this._id,
-      guest: this._props.guest.values,
+      guestId: this._props.guestId,
       expireAt: this._props.expireAt,
       status: this._props.status.toString(),
       celebrationId: this._props.celebrationId,

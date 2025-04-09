@@ -68,8 +68,6 @@ describe('CreateInviteCommandHandler integration tests', () => {
       const commandBus = module.get(CommandBus);
       const commandHandler = module.get(CreateInviteCommandHandler);
       const spyCommandHandler = jest.spyOn(commandHandler, 'execute');
-      const { address, date, description, title } =
-        new CelebrationAggregateBuilder().build().values;
       const command = new CreateInviteCommand(randomUUID(), 'John');
       await commandBus.execute(command).catch(() => {});
       expect(spyCommandHandler).toHaveBeenCalledTimes(1);
