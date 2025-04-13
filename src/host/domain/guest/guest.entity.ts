@@ -22,7 +22,7 @@ export class GuestEntity {
       );
     if (invite.values.guestId)
       throw new Error(
-        'Cannot create guest to this invite because it already guest`',
+        'Cannot create guest to this invite because it already have a guest',
       );
     const guest = new GuestEntity(randomUUID(), {
       name,
