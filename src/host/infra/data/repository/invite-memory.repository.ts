@@ -1,4 +1,4 @@
-import { InviteAggregate } from '../../../domain/invite.aggregate';
+import { InviteAggregate } from '../../../domain/invite/invite.aggregate';
 import { InviteRepository } from '../../../application/repository/invite.repository';
 import { Injectable } from '@nestjs/common';
 

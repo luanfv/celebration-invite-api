@@ -1,12 +1,12 @@
-import { Guest } from '../../../domain/entity/guest.entity';
+import { GuestEntity } from '../../../domain/guest/guest.entity';
 import { GuestRepository } from '../../../application/repository/guest.repository';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GuestMemoryRepository implements GuestRepository {
-  private _guests: Guest[] = [];
+  private _guests: GuestEntity[] = [];
 
-  async save(guest: Guest): Promise<void> {
+  async save(guest: GuestEntity): Promise<void> {
     this._guests.push(guest);
   }
 }

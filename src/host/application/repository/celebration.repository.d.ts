@@ -1,4 +1,4 @@
-import { CelebrationAggregate } from '../../domain/celebration.aggregate';
+import { CelebrationAggregate } from '../../domain/celebration/celebration.aggregate';
 
 export interface CelebrationRepository {
   save(celebration: CelebrationAggregate): Promise<CelebrationAggregate>;

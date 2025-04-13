@@ -3,8 +3,8 @@ import { CreateCelebrationCommandHandler } from './create-celebration.command.ha
 import { CommandBus, CqrsModule } from '@nestjs/cqrs';
 import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
 import { CreateCelebrationCommand } from '../create-celebration.command';
-import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
-import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
+import { CelebrationAggregateBuilder } from '../../../domain/celebration/celebration.aggregate.builder';
+import { CelebrationAggregate } from '../../../domain/celebration/celebration.aggregate';
 
 describe('CreateCelebrationCommandHandler integration tests', () => {
   let module: TestingModule;

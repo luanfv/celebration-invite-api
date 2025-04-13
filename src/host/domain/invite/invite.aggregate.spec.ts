@@ -1,15 +1,15 @@
 import { InviteAggregate } from './invite.aggregate';
-import { CelebrationAggregateBuilder } from './celebration.aggregate.builder';
-import { AbandonedStatusState, ClosedStatusState } from './state';
+import { CelebrationAggregateBuilder } from '../celebration/celebration.aggregate.builder';
+import { AbandonedStatusState, ClosedStatusState } from '../celebration/state';
 
-describe('Invite entity unit tests', () => {
+describe('Invite aggregate unit tests', () => {
   describe('create', () => {
     it('SHOULD return an invite', () => {
       const celebration = new CelebrationAggregateBuilder().build();
       const result = InviteAggregate.create(celebration);
       expect(result.values).toEqual({
         id: expect.any(String),
-        status: 'PENDENT',
+        status: 'DRAFT',
         expireAt: celebration.values.date,
         guestId: undefined,
         celebrationId: celebration.values.id,

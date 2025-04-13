@@ -1,8 +1,8 @@
 import { CqrsModule, EventBus } from '@nestjs/cqrs';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfirmCelebrationEventHandler } from './confirm-celebration.event.handler';
-import { CelebrationAggregateBuilder } from '../../domain/celebration.aggregate.builder';
-import { ConfirmCelebrationEvent } from '../../domain/event/confirm-celebration.event';
+import { CelebrationAggregateBuilder } from '../../domain/celebration/celebration.aggregate.builder';
+import { ConfirmCelebrationEvent } from '../../domain/celebration/event/confirm-celebration.event';
 
 describe('ConfirmCelebrationEventHandler integration tests', () => {
   let module: TestingModule;

@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ConfirmCelebrationEvent } from '../../domain/event/confirm-celebration.event';
+import { ConfirmCelebrationEvent } from '../../domain/celebration/event/confirm-celebration.event';
 
 @EventsHandler(ConfirmCelebrationEvent)
 export class ConfirmCelebrationEventHandler

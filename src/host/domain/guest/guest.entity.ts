@@ -1,12 +1,12 @@
 import { randomUUID } from 'node:crypto';
-import { InviteAggregate } from '../invite.aggregate';
+import { InviteAggregate } from '../invite/invite.aggregate';
 
 type GuestProps = {
   name: string;
   inviteId: string;
 };
 
-export class Guest {
+export class GuestEntity {
   private readonly _id: string;
   private _props: GuestProps;
 
@@ -16,11 +16,15 @@ export class Guest {
   }
 
   static create(name: string, invite: InviteAggregate) {
-    if (invite.status !== 'PENDENT')
-      throw new Error('The invite is not pendent');
+    if (!invite.isDraft())
+      throw new Error(
+        `Cannot create guest to this invite because it status is ${invite.status}`,
+      );
     if (invite.values.guestId)
-      throw new Error('The invite already has a guest');
-    const guest = new Guest(randomUUID(), {
+      throw new Error(
+        'Cannot create guest to this invite because it already guest`',
+      );
+    const guest = new GuestEntity(randomUUID(), {
       name,
       inviteId: invite.values.id,
     });

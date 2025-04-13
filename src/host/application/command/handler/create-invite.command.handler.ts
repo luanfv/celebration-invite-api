@@ -7,13 +7,13 @@ import {
 import { CreateInviteCommand } from '../create-invite.command';
 import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
 import { CelebrationRepository } from '../../repository/celebration.repository';
-import { InviteAggregate } from '../../../domain/invite.aggregate';
+import { InviteAggregate } from '../../../domain/invite/invite.aggregate';
 import { InviteRepository } from '../../repository/invite.repository';
 import { InviteMemoryRepository } from '../../../infra/data/repository/invite-memory.repository';
 import { GuestRepository } from '../../repository/guest.repository';
 import { GuestMemoryRepository } from '../../../infra/data/repository/guest-memory.repository';
-import { CelebrationAggregate } from '../../../domain/celebration.aggregate';
-import { Guest } from '../../../domain/entity/guest.entity';
+import { CelebrationAggregate } from '../../../domain/celebration/celebration.aggregate';
+import { GuestEntity } from '../../../domain/guest/guest.entity';
 
 @CommandHandler(CreateInviteCommand)
 export class CreateInviteCommandHandler
@@ -49,11 +49,11 @@ export class CreateInviteCommandHandler
     celebration: CelebrationAggregate,
   ): {
     invite: InviteAggregate;
-    guest: Guest;
+    guest: GuestEntity;
   } {
     try {
       const invite = InviteAggregate.create(celebration);
-      const guest = Guest.create(guestName, invite);
+      const guest = GuestEntity.create(guestName, invite);
       return { invite, guest };
     } catch (err) {
       throw new UnprocessableEntityException(err?.message);

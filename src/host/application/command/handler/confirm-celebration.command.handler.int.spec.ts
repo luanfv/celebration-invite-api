@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfirmCelebrationCommand } from '../confirm-celebration.command';
 import { CelebrationMemoryRepository } from '../../../infra/data/repository/celebration-memory.repository';
 import { CelebrationRepository } from '../../repository/celebration.repository';
-import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
+import { CelebrationAggregateBuilder } from '../../../domain/celebration/celebration.aggregate.builder';
 import { randomUUID } from 'node:crypto';
 import {
   NotFoundException,
@@ -15,7 +15,7 @@ import {
   ClosedStatusState,
   ConfirmedStatusState,
   StatusState,
-} from '../../../domain/state';
+} from '../../../domain/celebration/state';
 
 describe('ConfirmCelebrationCommandHandler integration tests', () => {
   let module: TestingModule;

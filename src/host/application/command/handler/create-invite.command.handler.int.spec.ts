@@ -7,7 +7,7 @@ import { GuestMemoryRepository } from '../../../infra/data/repository/guest-memo
 import { CreateInviteCommand } from '../create-invite.command';
 import { randomUUID } from 'node:crypto';
 import { NotFoundException } from '@nestjs/common';
-import { CelebrationAggregateBuilder } from '../../../domain/celebration.aggregate.builder';
+import { CelebrationAggregateBuilder } from '../../../domain/celebration/celebration.aggregate.builder';
 
 describe('CreateInviteCommandHandler integration tests', () => {
   let module: TestingModule;
