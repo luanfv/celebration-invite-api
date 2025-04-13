@@ -8,10 +8,11 @@ import { ConfirmCelebrationEventHandler } from './application/event/confirm-cele
 import { CreateInviteCommandHandler } from './application/command/handler/create-invite.command.handler';
 import { GuestMemoryRepository } from './infra/data/repository/guest-memory.repository';
 import { InviteMemoryRepository } from './infra/data/repository/invite-memory.repository';
+import { InviteController } from './infra/api/invite.controller';
 
 @Module({
   imports: [CqrsModule],
-  controllers: [CelebrationController],
+  controllers: [CelebrationController, InviteController],
   providers: [
     CelebrationMemoryRepository,
     InviteMemoryRepository,
