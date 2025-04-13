@@ -1,7 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { CelebrationAggregate } from '../celebration/celebration.aggregate';
-import { InviteStatusEnum, StatusState } from './state/status.state';
-import { DraftStatusState } from './state/draft-status.state';
+import { DraftStatusState, InviteStatusEnum, StatusState } from './state';
 
 type InviteProps = {
   guestId?: string;
