@@ -9,6 +9,7 @@ import { CreateInviteCommandHandler } from './application/command/handler/create
 import { GuestMemoryRepository } from './infra/data/repository/guest-memory.repository';
 import { InviteMemoryRepository } from './infra/data/repository/invite-memory.repository';
 import { InviteController } from './infra/api/invite.controller';
+import { OpenCelebrationCommandHandler } from './application/command/handler/open-celebration.command.handler';
 
 @Module({
   imports: [CqrsModule],
@@ -20,6 +21,7 @@ import { InviteController } from './infra/api/invite.controller';
     CreateCelebrationCommandHandler,
     ConfirmCelebrationCommandHandler,
     CreateInviteCommandHandler,
+    OpenCelebrationCommandHandler,
     ConfirmCelebrationEventHandler,
   ],
 })
