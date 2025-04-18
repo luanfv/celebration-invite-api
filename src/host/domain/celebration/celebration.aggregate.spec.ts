@@ -1,7 +1,11 @@
 import { faker } from '@faker-js/faker/.';
 import { CelebrationAggregate } from './celebration.aggregate';
 import { randomUUID } from 'node:crypto';
-import { CelebrationStatusEnum } from './state';
+import {
+  CelebrationStatusEnum,
+  DraftStatusState,
+  OpenedStatusState,
+} from './state';
 import { CelebrationAggregateBuilder } from './celebration.aggregate.builder';
 import { ConfirmCelebrationEvent } from './event/confirm-celebration.event';
 
@@ -23,7 +27,7 @@ describe('Celebration aggregate unit tests', () => {
         date: expect.any(Date),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-        status: expect.any(String),
+        status: CelebrationStatusEnum.DRAFT,
         address: {
           zipCode: expect.any(String),
           street: expect.any(String),
@@ -56,7 +60,7 @@ describe('Celebration aggregate unit tests', () => {
           date: expect.any(Date),
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
-          status: expect.any(String),
+          status: status,
           address: {
             zipCode: expect.any(String),
             street: expect.any(String),
@@ -87,15 +91,29 @@ describe('Celebration aggregate unit tests', () => {
     });
   });
 
+  describe('changeToOpened', () => {
+    it('SHOULD update the status to OPENED', () => {
+      const celebration = new CelebrationAggregateBuilder()
+        .withStatus(new DraftStatusState())
+        .build();
+      celebration.changeToOpened();
+      expect(celebration.status).toEqual('OPENED');
+    });
+  });
+
   describe('changeToConfirmed', () => {
     it('SHOULD update the status to CONFIRMED', () => {
-      const celebration = new CelebrationAggregateBuilder().build();
+      const celebration = new CelebrationAggregateBuilder()
+        .withStatus(new OpenedStatusState())
+        .build();
       celebration.changeToConfirmed();
       expect(celebration.status).toEqual('CONFIRMED');
     });
 
     it('SHOULD apply the ConfirmCelebrationEvent', () => {
-      const celebration = new CelebrationAggregateBuilder().build();
+      const celebration = new CelebrationAggregateBuilder()
+        .withStatus(new OpenedStatusState())
+        .build();
       const spyApply = jest.spyOn(celebration, 'apply');
       celebration.changeToConfirmed();
       expect(spyApply).toHaveBeenCalledWith(

@@ -1,3 +1,4 @@
+import { DraftStatusState } from './draft-status.state';
 import { AbandonedStatusState } from './abandoned-status.state';
 import { ClosedStatusState } from './closed-status.state';
 import { ConfirmedStatusState } from './confirmed-status.state';
@@ -14,6 +15,7 @@ export {
   ConfirmedStatusState,
   OpenedStatusState,
   AbstractStatusState,
+  DraftStatusState,
   CelebrationStatusEnum,
   StatusState,
 };
