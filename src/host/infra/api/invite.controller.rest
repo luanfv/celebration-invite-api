@@ -1,3 +1,5 @@
+### CREATE CELEBRATION INVITE
+
 POST http://localhost:3000/api/celebration/711add0d-ae6e-4624-a10b-7a1840b3fd47/invite
 content-type: application/json
 

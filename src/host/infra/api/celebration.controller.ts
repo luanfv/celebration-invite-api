@@ -1,9 +1,11 @@
+import { OpenCelebrationCommand } from '../../application/command/open-celebration.command';
 import { Post, Controller, Body, Patch, Param } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateCelebrationCommand } from '../../application/command/create-celebration.command';
 import { CreateCelebrationDto } from './dto/create-celebration.dto';
 import { ConfirmCelebrationParamDto } from './dto/confirm-celebration.dto';
 import { ConfirmCelebrationCommand } from '../../application/command/confirm-celebration.command';
+import { OpenCelebrationParamDto } from './dto/open-celebration.dto';
 
 @Controller('/celebration')
 export class CelebrationController {
@@ -27,12 +29,15 @@ export class CelebrationController {
     };
   }
 
+  @Patch('/:celebrationId/open')
+  async open(@Param() { celebrationId }: OpenCelebrationParamDto) {
+    const command = new OpenCelebrationCommand(celebrationId);
+    await this.commandBus.execute(command);
+  }
+
   @Patch('/:celebrationId/confirm')
   async confirm(@Param() { celebrationId }: ConfirmCelebrationParamDto) {
     const command = new ConfirmCelebrationCommand(celebrationId);
-    const id = await this.commandBus.execute(command);
-    return {
-      id,
-    };
+    await this.commandBus.execute(command);
   }
 }

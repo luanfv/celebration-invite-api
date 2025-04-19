@@ -24,7 +24,10 @@ export class OpenCelebrationCommandHandler
     if (!celebration) throw new NotFoundException('Celebration not found');
     try {
       celebration.changeToOpened();
-      await this.celebrationRepository.save(celebration);
+      await this.celebrationRepository.updateById(
+        celebration.values.id,
+        celebration,
+      );
     } catch (err) {
       throw new UnprocessableEntityException(err.message);
     }

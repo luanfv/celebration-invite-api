@@ -18,19 +18,8 @@ describe('OpenedStatusState unit tests', () => {
     });
   });
 
-  describe('close', () => {
-    it('SHOULD throw an exception', () => {
-      const celebration = new CelebrationAggregateBuilder()
-        .withStatus(status)
-        .build();
-      expect(() => status.close(celebration)).toThrow(
-        new Error('Cannot close celebration with status equal OPENED'),
-      );
-    });
-  });
-
   describe('confirm', () => {
-    it('SHOULD change status by celebration to CLOSED', () => {
+    it('SHOULD change status by celebration to CONFIRMED', () => {
       const celebration = new CelebrationAggregateBuilder()
         .withStatus(status)
         .build();

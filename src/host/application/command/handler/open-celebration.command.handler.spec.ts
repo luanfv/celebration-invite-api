@@ -25,18 +25,24 @@ describe('OpenCelebrationCommandHandler integration tests', () => {
     await module.close();
   });
 
-  it('SHOULD call CelebrationRepository to save', async () => {
+  it('SHOULD call CelebrationRepository to update', async () => {
     jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
     const celebrationRepository = module.get(CelebrationMemoryRepository);
     const celebration = new CelebrationAggregateBuilder().build();
     await celebrationRepository.save(celebration);
     const commandBus = module.get(CommandBus);
     const command = new OpenCelebrationCommand(celebration.values.id);
-    const spyCelebrationRepository = jest.spyOn(celebrationRepository, 'save');
+    const spyCelebrationRepository = jest.spyOn(
+      celebrationRepository,
+      'updateById',
+    );
     const expectedResult = Object.assign(celebration, {});
     expectedResult.status = new OpenedStatusState();
     await commandBus.execute(command);
-    expect(spyCelebrationRepository).toHaveBeenCalledWith(expectedResult);
+    expect(spyCelebrationRepository).toHaveBeenCalledWith(
+      expectedResult.values.id,
+      expectedResult,
+    );
   });
 
   describe('WHEN not found celebration', () => {
