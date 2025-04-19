@@ -13,12 +13,12 @@ import {
 export class InviteAggregateBuilder {
   private _invite: InviteAggregate;
   private _statusStrategy = {
-    [InviteStatusEnum.ACCEPTED]: new AcceptedStatusState(),
-    [InviteStatusEnum.DRAFT]: new DraftStatusState(),
-    [InviteStatusEnum.EXPIRED]: new ExpiredStatusState(),
-    [InviteStatusEnum.PENDENT]: new PendentStatusState(),
-    [InviteStatusEnum.REJECTED]: new RejectedStatusState(),
-    [InviteStatusEnum.REVOKED]: new RevokedStatusState(),
+    [InviteStatusEnum.ACCEPTED]: AcceptedStatusState,
+    [InviteStatusEnum.DRAFT]: DraftStatusState,
+    [InviteStatusEnum.EXPIRED]: ExpiredStatusState,
+    [InviteStatusEnum.PENDENT]: PendentStatusState,
+    [InviteStatusEnum.REJECTED]: RejectedStatusState,
+    [InviteStatusEnum.REVOKED]: RevokedStatusState,
   };
 
   constructor() {
@@ -27,7 +27,7 @@ export class InviteAggregateBuilder {
   }
 
   withStatusValue(statusValue: InviteStatusEnum) {
-    this._invite.status = this._statusStrategy[statusValue];
+    this._invite.status = new this._statusStrategy[statusValue]();
     return this;
   }
 

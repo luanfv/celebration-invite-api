@@ -42,8 +42,8 @@ describe('CreateCelebrationCommandHandler integration tests', () => {
   it('SHOULD save celebration on repository', async () => {
     const commandBus = module.get(CommandBus);
     const repository = module.get(CelebrationMemoryRepository);
-    const { address, date, description, title } =
-      new CelebrationAggregateBuilder().build().values;
+    const celebration = new CelebrationAggregateBuilder().build();
+    const { address, date, description, title } = celebration.values;
     const command = new CreateCelebrationCommand(
       title,
       description,
@@ -53,9 +53,14 @@ describe('CreateCelebrationCommandHandler integration tests', () => {
       address.number,
     );
     const id = await commandBus.execute(command);
-    await expect(repository.findById(id)).resolves.toEqual(
-      expect.any(CelebrationAggregate),
-    );
+    const result = await repository.findById(id);
+    expect(result.values).toEqual({
+      ...celebration.values,
+      id,
+      status: 'DRAFT',
+      updatedAt: expect.any(Date),
+      createdAt: expect.any(Date),
+    });
   });
 
   describe('WHEN call CreateCelebrationCommand', () => {

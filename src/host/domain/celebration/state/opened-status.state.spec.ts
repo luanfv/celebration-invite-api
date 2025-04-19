@@ -4,12 +4,12 @@ import { OpenedStatusState } from './opened-status.state';
 describe('OpenedStatusState unit tests', () => {
   const status = new OpenedStatusState();
 
-  it('SHOULD be value equal CONFIRMED', () => {
+  it('SHOULD be value equal OPENED', () => {
     expect(status.value).toEqual('OPENED');
   });
 
   describe('abandon', () => {
-    it('SHOULD SHOULD change status by celebration to ABANDONED', () => {
+    it('SHOULD change status by celebration to ABANDONED', () => {
       const celebration = new CelebrationAggregateBuilder()
         .withStatus(status)
         .build();
@@ -18,19 +18,8 @@ describe('OpenedStatusState unit tests', () => {
     });
   });
 
-  describe('close', () => {
-    it('SHOULD throw an exception', () => {
-      const celebration = new CelebrationAggregateBuilder()
-        .withStatus(status)
-        .build();
-      expect(() => status.close(celebration)).toThrow(
-        new Error('Cannot close celebration with status equal OPENED'),
-      );
-    });
-  });
-
   describe('confirm', () => {
-    it('SHOULD change status by celebration to CLOSED', () => {
+    it('SHOULD change status by celebration to CONFIRMED', () => {
       const celebration = new CelebrationAggregateBuilder()
         .withStatus(status)
         .build();

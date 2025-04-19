@@ -14,6 +14,7 @@ import {
   AbandonedStatusState,
   ClosedStatusState,
   ConfirmedStatusState,
+  OpenedStatusState,
   StatusState,
 } from '../../../domain/celebration/state';
 
@@ -47,7 +48,9 @@ describe('ConfirmCelebrationCommandHandler integration tests', () => {
     const repository = module.get<CelebrationRepository>(
       CelebrationMemoryRepository,
     );
-    const celebration = new CelebrationAggregateBuilder().build();
+    const celebration = new CelebrationAggregateBuilder()
+      .withStatus(new OpenedStatusState())
+      .build();
     await repository.save(celebration);
     expect(celebration.status).not.toEqual(expectedResult);
     await commandBus.execute(
@@ -64,7 +67,9 @@ describe('ConfirmCelebrationCommandHandler integration tests', () => {
     const repository = module.get<CelebrationRepository>(
       CelebrationMemoryRepository,
     );
-    const celebration = new CelebrationAggregateBuilder().build();
+    const celebration = new CelebrationAggregateBuilder()
+      .withStatus(new OpenedStatusState())
+      .build();
     await repository.save(celebration);
     await expect(
       commandBus.execute(new ConfirmCelebrationCommand(celebration.values.id)),

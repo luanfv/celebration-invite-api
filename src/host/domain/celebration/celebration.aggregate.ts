@@ -5,6 +5,7 @@ import {
   CelebrationStatusEnum,
   ClosedStatusState,
   ConfirmedStatusState,
+  DraftStatusState,
   OpenedStatusState,
   StatusState,
 } from './state';
@@ -43,6 +44,14 @@ type CelebrationRestoreProps = {
   createdAt: Date;
 };
 
+const statusStrategy = {
+  [CelebrationStatusEnum.DRAFT]: DraftStatusState,
+  [CelebrationStatusEnum.OPENED]: OpenedStatusState,
+  [CelebrationStatusEnum.ABANDONED]: AbandonedStatusState,
+  [CelebrationStatusEnum.CLOSED]: ClosedStatusState,
+  [CelebrationStatusEnum.CONFIRMED]: ConfirmedStatusState,
+};
+
 export class CelebrationAggregate extends AggregateRoot {
   private readonly _id: string;
   private _props: CelebrationProps;
@@ -67,7 +76,7 @@ export class CelebrationAggregate extends AggregateRoot {
       updatedAt: new Date(),
       date,
       description,
-      status: this.generateStatus(CelebrationStatusEnum.OPENED),
+      status: new DraftStatusState(),
       title,
     });
   }
@@ -99,18 +108,7 @@ export class CelebrationAggregate extends AggregateRoot {
     const statusFound: CelebrationStatusEnum = CelebrationStatusEnum[status];
     if (!statusFound)
       throw new Error(`Celebration - status equal ${status} not exists`);
-    switch (statusFound) {
-      case CelebrationStatusEnum.OPENED:
-        return new OpenedStatusState();
-      case CelebrationStatusEnum.ABANDONED:
-        return new AbandonedStatusState();
-      case CelebrationStatusEnum.CLOSED:
-        return new ClosedStatusState();
-      case CelebrationStatusEnum.CONFIRMED:
-        return new ConfirmedStatusState();
-      default:
-        return new OpenedStatusState();
-    }
+    return new statusStrategy[status]();
   }
 
   set status(status: StatusState) {
@@ -144,6 +142,11 @@ export class CelebrationAggregate extends AggregateRoot {
 
   isClosed() {
     return this.status === CelebrationStatusEnum.CLOSED;
+  }
+
+  changeToOpened() {
+    this._props.status.open(this);
+    this._props.updatedAt = new Date();
   }
 
   changeToConfirmed() {
